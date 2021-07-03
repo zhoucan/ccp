@@ -1,4 +1,4 @@
-# vue1
+# ccp
 
 ## Project setup
 ```
