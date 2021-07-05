@@ -118,7 +118,9 @@ export default {
     this.getUserInfoFn()
   },
   mounted () {},
-
+  destroyed () {
+    clearInterval(this.timer)
+  },
   methods: {
     goDetail () {
       this.$router.push({ path: '/detail' })
@@ -197,6 +199,7 @@ export default {
             width: 180,
             height: 180
           })
+
           if (cppAddress === null || cppAddress === '') {
             this.newsCppAddress = ''
             this.cppAddress = ''

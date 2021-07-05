@@ -41,7 +41,9 @@ service.interceptors.response.use(
   response => {
     // 接收后台参数状态
     const res = response.data
-    if (response.config.url === '/system/registry/getUserInfo') return res
+    console.log(response)
+    const { isShowMessage } = response.config
+    if (!isShowMessage) return res
     if (res.code === 200) {
       const message = res.msg
       Message({
