@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>CCP自助兑换系统</title>
+	<link rel="stylesheet" href="icon/iconfont.css">
+	<link rel="stylesheet" href="css/style.css" />
+	<link rel="stylesheet" href="css/animate.min.css" />
+  <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+	<script src="js/jquery.min.js"></script>
+    <style>
+      body,html {
+        height: 100%;
+      }
+      #app {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100%;
+      }
+      .el-card.box-card{
+           width: 90%;
+      }
+      .pagination {
+          float: right;
+          margin: 20px;
+      }
+  </style>
+</head>
+<body>
+<div id="app">
+     <el-card class="box-card">
+        <el-form :inline="true" ref="ruleForm" :model="formInline" class="demo-form-inline">
+          <el-row>
+            <el-col :xs="6" :md="3">
+            <el-form-item>
+              <el-input v-model="formInline.toAddress" placeholder="提现地址"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :xs="6" :md="3">
+            <el-form-item>
+                <el-input v-model="formInline.hash" placeholder="hahs值"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :xs="6" :md="3">
+              <el-form-item>
+                <el-select v-model="formInline.cashStatus" placeholder="状态" clearable>
+                  <el-option label="完成" value="1"></el-option>
+                  <el-option label="未完成" value="0"></el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-form-item>
+              <el-button type="primary" @click="onSubmit('ruleForm')">查询</el-button>
+            </el-form-item>
+          </el-row>
+            
+          </el-form>
+                <el-table
+                ref="tableRef"
+                :height="tableHeight"
+                :data="tableData"
+                style="width: 100%">
+                <el-table-column
+                type="index"
+                label="序号"
+                width="100">
+              </el-table-column>
+                <el-table-column
+                  prop="toAddress"
+                  label="提现地址"
+                  width="180">
+                </el-table-column>
+                <el-table-column
+                  prop="cashStatus"
+                  label="状态"
+                  width="180">
+                  <template scope="scope">                    
+                    <p v-if="scope.row.cashStatus == true">完成</p>
+                    <p v-if="scope.row.cashStatus == false">未完成</p>
+                </template>
+                </el-table-column>
+                <el-table-column
+                prop="hash"
+                label="交易hash"
+                width="180">
+              </el-table-column>
+                <el-table-column
+                  prop="amount"
+                  label="金额">
+                </el-table-column>
+                 <el-table-column
+                  prop="createTime"
+                  label="创建时间">
+                </el-table-column>
+                <el-table-column
+                prop="updateTime"
+                label="完成时间">
+              </el-table-column>
+               </el-table>
+              </el-table>
+              <el-row type="flex"  justify="end">
+                <el-pagination
+                class="pagination"
+                @size-change="handleSizeChange"
+                @current-change="handleCurrentChange"
+                :current-page="currentPage"
+                :page-sizes="[10, 20, 30, 40]"
+                :page-size="100"
+                layout="total, sizes, prev, pager, next, jumper"
+                :total="total">
+              </el-pagination>
+              </el-row>
+             
+              
+      </el-card>
+     
+</div>
+</body>
+    <script src="js/vue.js"></script>
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script>
+axios.defaults.headers.common['Authorization'] =  "Bearer " + localStorage.getItem("token")
+   var app =  new Vue({
+      el: '#app',
+      data: {
+           formInline:{
+                toAddress: '',
+                hash:'',
+                cashStatus: ''
+            },
+            tableData:[],
+            Ip:'https://exchange.gcblock.cn/api',
+            currentPage:1,
+            total:'',
+            pageNum:1,
+            pageSize:10,
+            flagurl:false,
+            tableHeight:300
+          },
+      created() {
+          this.cppOutRechargeList()
+      },
+      mounted() {
+        this.$nextTick(()=> {
+            this.tableHeight = window.innerHeight - this.$refs.tableRef.$el.getBoundingClientRect().top - 137
+            // 监听窗口大小变化
+            // this.$refs.tableRef.$el.getBoundingClientRect().top：表格距离浏览器的高度
+           window.onresize = ()=> {
+            this.tableHeight = window.innerHeight - this.$refs.tableRef.$el.getBoundingClientRect().top - 137
+          }
+
+    })
+
+      },
+      methods: {
+        onSubmit(formName){
+            this.$refs[formName].validate((valid) => {
+          if (valid) {
+            this.flagurl = true
+            this.cppOutRechargeList()
+          } else {
+            return false;
+          }
+        });
+     
+            
+        },
+        handleSizeChange(val){
+            this.pageSize = val
+            this.cppOutRechargeList()
+        },
+        handleCurrentChange(val){
+            this.currentPage = val
+            this.cppOutRechargeList()
+        },
+        cppOutRechargeList() {
+            let url =''
+            if(this.flagurl){
+                url = `${this.Ip}/system/out/cppOutRechargeList?pageNum=${this.currentPage}&pageSize=${this.pageSize}&toAddress=${this.formInline.toAddress}&hash=${this.formInline.hash}&cashStatus=${this.formInline.cashStatus}`
+            }else{
+                url = `${this.Ip}/system/out/cppOutRechargeList?pageNum=${this.currentPage}&pageSize=${this.pageSize}`
+            }
+            axios({
+                    method: 'get',
+                    url: url,
+                    responseType: 'json'
+                }).then(response => {
+                    // 请求成功
+                    let res = response.data;
+                    this.tableData =  res.rows 
+                    this.total = res.total
+                    console.log(this.tableData);
+                    this.flagurl = false
+                }).catch(error => {
+                    // 请求失败，
+                    console.log(error);
+                });
+
+            }
+
+          }
+    })
+  </script>
+ 
+</html>
