@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import Login from '@/views/login'
 import Home from '@/views/home'
 import Detaillist from '@/views/detaillist'
+import test from '@/views/test'
 
 Vue.use(Router)
 
@@ -25,6 +26,11 @@ const routes = [
     path: '/detail',
     name: '提现详情',
     component: Detaillist
+  },
+  {
+    path: '/test',
+    name: '测试',
+    component: test
   }
 
 ]

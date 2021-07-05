@@ -15,7 +15,6 @@ switch (nodeEnv) {
     baseUrl = 'https://exchange.gcblock.cn/api'
 }
 
-console.log(nodeEnv)
 const service = axios.create({
   timeout: 5000,
   baseURL: baseUrl
