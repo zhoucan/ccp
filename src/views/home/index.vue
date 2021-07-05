@@ -25,7 +25,7 @@
         <el-button type="danger" round @click="goDetail">提现列表</el-button>
       </div>
       <div class="money">
-        <p>余额：<span class="mymoney">0</span><span>KB</span></p>
+        <p>余额：<span class="mymoney">{{ cppRemains }}</span><span>KB</span></p>
       </div>
       <div class="logout">
         <el-button type="warning" round @click='logout'>退出</el-button>
@@ -87,6 +87,7 @@ import ClipboardJS from 'clipboard'
 export default {
   data () {
     return {
+      cppRemains: 0,
       codqrloading: true,
       timer: null,
       cppAddress: '',
@@ -102,6 +103,7 @@ export default {
         email: '',
         code: ''
       },
+
       Rules: {
         code: [{ required: true, message: '请输入验证码', trigger: 'blur' }],
         toAddress: [
@@ -151,9 +153,8 @@ export default {
           cppOutRecharge(this.ruleForm)
             .then(res => {
               this.getUserInfoFn()
-            })
-            .catch(err => {
-              console.log(err)
+              this.withdrawalDisabled = false
+              this.dialogFormVisible = false
             })
         } else {
           console.log('error submit!!')
@@ -186,8 +187,9 @@ export default {
       })
       getUserInfo()
         .then(res => {
-          const { cppAddress, email } = res.data
+          const { cppAddress, email, cppRemain } = res.data
           this.ruleForm.email = email
+          this.cppRemains = cppRemain
           this.codqrloading = false
           // eslint-disable-next-line no-unused-vars
           var qrcode = new QRCode(this.$refs.qrCodeUrl, {
@@ -195,16 +197,20 @@ export default {
             width: 180,
             height: 180
           })
-          const newsCppAddress =
+          console.log(cppAddress)
+          if (cppAddress === null || cppAddress === '') {
+            this.newsCppAddress = ''
+            this.cppAddress = ''
+          } else {
+            const newsCppAddress =
             cppAddress.substr(0, 5) +
             '*************************' +
             cppAddress.substr(cppAddress.length - 5, 5)
-          this.copycppAddress = cppAddress
-          this.cppAddress = newsCppAddress
-          // this.setforInterval()
-        })
-        .catch(err => {
-          console.error(err)
+            this.copycppAddress = cppAddress
+            this.cppAddress = newsCppAddress
+          }
+
+          this.setforInterval()
         })
     }
   }

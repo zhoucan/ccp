@@ -36,3 +36,11 @@ export function cppOutRecharge (data) {
     data
   })
 }
+
+export function cppOutRechargeList (params) {
+  return request({
+    url: '/system/out/cppOutRechargeList',
+    method: 'get',
+    params
+  })
+}

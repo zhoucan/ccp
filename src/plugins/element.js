@@ -34,10 +34,14 @@ import {
   MessageBox,
   Loading,
   Link,
-  Alert
+  Alert,
+  Select,
+  Option
 } from 'element-ui'
 // 导入element样式
 import 'element-ui/lib/theme-chalk/index.css'
+Vue.use(Select)
+Vue.use(Option)
 Vue.use(Alert)
 Vue.use(Link)
 Vue.use(Button)
