@@ -11,10 +11,12 @@
             v-model="formregister.userName"
             prefix-icon="el-icon-user"
             placeholder="请输入用户名"
+            class="inpstyle"
           ></el-input>
         </el-form-item>
         <el-form-item prop="password">
           <el-input
+          class="inpstyle"
             type="password"
             v-model="formregister.password"
             prefix-icon="el-icon-lock"
@@ -25,13 +27,15 @@
           <el-row type="flex" justify="space-between">
             <el-col :span="14"
               ><el-input
+                class="inpstyle"
                 v-model="formregister.email"
                 placeholder="请输入邮箱"
               ></el-input
             ></el-col>
             <el-col :span="9"
               ><el-button
-                type='danger'
+                round
+                class="getcodebtn"
                 style="width:100%"
                 :disabled="isDisabled"
                 @click="sendMsg"
@@ -42,13 +46,14 @@
         </el-form-item>
         <el-form-item prop="code">
           <el-input
+            class="inpstyle"
             v-model="formregister.code"
             placeholder="请输入验证码"
           ></el-input>
         </el-form-item>
         <el-button
-          type="success"
           round
+          class="registerbtn"
           @click="registerSubmit('ruleFormRegister')"
           style="width:100%"
           :loading="registerDisbled"
@@ -67,6 +72,7 @@
             v-model="formlogin.username"
             prefix-icon="el-icon-user"
             placeholder="请输入用户名"
+            class="inpstyle"
           ></el-input>
         </el-form-item>
         <el-form-item prop="password">
@@ -75,11 +81,12 @@
             v-model="formlogin.password"
             prefix-icon="el-icon-lock"
             placeholder="请输入密码"
+            class="inpstyle"
           ></el-input>
         </el-form-item>
         <el-button
           round
-          type="success"
+          class="loginbtn"
           :loding='loginDisbled'
           @click="loginSubmit('ruleFormlogin')"
           style="width:100%"
@@ -214,6 +221,9 @@ export default {
 </script>
 
 <style scoped>
+.getcodebtn,.registerbtn,.loginbtn {
+  color:#0d86dc;
+}
 .tip {
   text-align: center;
   padding-top: 20px;
@@ -243,5 +253,12 @@ export default {
   width: 320px;
 
   height: 300px;
+}
+.inpstyle /deep/ input.el-input__inner{
+    border: 0;
+    background: transparent;
+    border-bottom: 1px solid #fff;
+    border-radius: 0;
+    color:#fff;
 }
 </style>

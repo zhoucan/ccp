@@ -197,7 +197,6 @@ export default {
             width: 180,
             height: 180
           })
-          console.log(cppAddress)
           if (cppAddress === null || cppAddress === '') {
             this.newsCppAddress = ''
             this.cppAddress = ''
