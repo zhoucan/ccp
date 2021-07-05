@@ -4,7 +4,8 @@ export function register (data) {
   return request({
     url: '/system/registry/registry',
     method: 'post',
-    data
+    data,
+    isShowMessage: true
   })
 }
 export function login (data) {
