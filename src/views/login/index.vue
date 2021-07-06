@@ -145,6 +145,9 @@ export default {
       }
     }
   },
+  created () {
+    this.loginOrregister = this.$route.query.redirect
+  },
   methods: {
     goLogin () {
       if (this.loginOrregister !== 'register') {
@@ -158,13 +161,11 @@ export default {
         if (valid) {
           this.registerDisbled = true
           register(this.formregister).then(res => {
-            console.log(res)
+            this.registerDisbled = false
+            this.loginOrregister = 'sign'
+          }).catch(() => {
             this.registerDisbled = false
           })
-        } else {
-          console.log('error submit!!')
-          this.registerDisbled = false
-          return false
         }
       })
     },
@@ -176,10 +177,9 @@ export default {
             localStorage.setItem('token', res.token)
             this.$router.push({ path: '/home' })
             this.loginDisbled = false
+          }).catch(() => {
+            this.loginDisbled = false
           })
-        } else {
-          console.log('error submit!!')
-          return false
         }
       })
     },

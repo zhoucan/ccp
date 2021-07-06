@@ -1,5 +1,6 @@
 import axios from 'axios'
 import { Message } from 'element-ui'
+import store from '@/store'
 import router from '@/router'
 const nodeEnv = process.env.NODE_ENV
 let baseUrl = ''
@@ -41,16 +42,17 @@ service.interceptors.response.use(
   response => {
     // 接收后台参数状态
     const res = response.data
-    console.log(response)
     const { isShowMessage } = response.config
-    if (!isShowMessage) return res
-    if (res.code === 200) {
-      const message = res.msg
+    const message = res.msg
+    if (isShowMessage && res.code === 200) {
       Message({
         message,
         type: 'success',
         duration: 3 * 1000
       })
+      return res
+    }
+    if (res.code === 200) {
       return res
     } else {
       const message = (res.error && res.error.message) || res.message || res.msg || '未知错误'
@@ -61,11 +63,12 @@ service.interceptors.response.use(
       })
       console.log('拦截器打印错误:', res)
       // 这里可以设置后台返回状态码是500或者是其他,然后重定向跳转
-      if (res.code === 401) {
-        router.push({ path: '/login' })
+      if (res.code === 401 || res.code === 403) {
+        router.push({ path: '/', query: { redirect: 'sign' } })
+        localStorage.removeItem('token')
       }
       if (res.code === 500) {
-
+        store.commit('user/BtnReset', false)
       }
       return Promise.reject(
         new Error(res.message || (res.error && res.error.message) || '未知错误')
@@ -79,7 +82,7 @@ service.interceptors.response.use(
       // 获取错误码,弹出提示信息,reject()
       const code = error.response.status
       if (code === 401) {
-        // router.push('/login');
+        router.push('/')
         return Promise.reject(
           new Error('登录过期,请重新登录')
         )

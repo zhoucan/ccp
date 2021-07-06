@@ -73,7 +73,7 @@
         </el-form-item>
       </el-form>
   <div slot="footer" class="dialog-footer">
-    <el-button type="success" @click="withdrawalSubmit('ruleForm')"  :loading = 'withdrawalDisabled' style="width:100%">确 定</el-button>
+    <el-button type="success" @click="withdrawalSubmit('ruleForm')"  :loading='withdrawalDisabled' style="width:100%">确 定</el-button>
   </div>
 </el-dialog>
   </div>
@@ -82,6 +82,7 @@
 
 <script>
 import { getUserInfo, sendEmail, cppOutRecharge } from '@/api'
+import { mapState } from 'vuex'
 import QRCode from 'qrcodejs2'
 import ClipboardJS from 'clipboard'
 export default {
@@ -93,7 +94,6 @@ export default {
       cppAddress: '',
       copycppAddress: '',
       dialogFormVisible: false,
-      withdrawalDisabled: false,
       getCode: '获取验证码',
       time: 20,
       isDisabled: false,
@@ -113,7 +113,10 @@ export default {
       }
     }
   },
+  computed: {
+    ...mapState('user', ['withdrawalDisabled'])
 
+  },
   created () {
     this.getUserInfoFn()
   },
@@ -122,6 +125,7 @@ export default {
     clearInterval(this.timer)
   },
   methods: {
+
     goDetail () {
       this.$router.push({ path: '/detail' })
     },
@@ -151,17 +155,13 @@ export default {
     withdrawalSubmit (formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
-          this.withdrawalDisabled = true
+          this.$store.commit('user/BtnLoding', true)
           cppOutRecharge(this.ruleForm)
             .then(res => {
               this.getUserInfoFn()
-              this.withdrawalDisabled = false
+              this.$store.commit('user/BtnReset', false)
               this.dialogFormVisible = false
             })
-        } else {
-          console.log('error submit!!')
-          this.withdrawalDisabled = false
-          return false
         }
       })
     },
@@ -200,7 +200,7 @@ export default {
             height: 180
           })
 
-          if (cppAddress === null || cppAddress === '') {
+          if (cppAddress === null || cppAddress === '' || typeof (cppAddress) === 'undefined') {
             this.newsCppAddress = ''
             this.cppAddress = ''
           } else {
