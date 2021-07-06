@@ -42,7 +42,11 @@ const router = new Router({
 router.beforeEach((to, form, next) => {
   const Token = localStorage.getItem('token')
 
-  if (to.path === '/login') return next()
+  if (to.path === '/login') {
+    localStorage.removeItem('token')
+    next()
+    return
+  }
 
   if (!Token) return next({ path: '/login' })
 

@@ -82,7 +82,7 @@
                 @size-change="handleSizeChange"
                 @current-change="handleCurrentChange"
                 :current-page="this.formInline.currentPage"
-                :page-sizes="[1, 20, 30]"
+                :page-sizes="[10, 20, 30]"
                 :page-size="100"
                 layout="total, sizes, prev, pager, next, jumper"
                 :total="total">
