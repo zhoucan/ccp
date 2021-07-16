@@ -1,6 +1,6 @@
 <template>
  <div class="list">
-   <div class="back">
+   <div class="backbtn">
         <el-button @click="goBack"  el-button icon="el-icon-arrow-left" circle></el-button>
    </div>
   <div class="content">
@@ -53,7 +53,7 @@
                   prop="cashStatus"
                   label="状态"
                   width="180">
-                  <template scope="scope">
+                  <template slot-scope="scope">
                     <p v-if="scope.row.cashStatus == true">完成</p>
                     <p v-if="scope.row.cashStatus == false">未完成</p>
                 </template>
@@ -154,7 +154,7 @@ export default {
 </script>
 
 <style scoped>
-.back {
+.backbtn {
     padding: 20px;
 }
 .content {

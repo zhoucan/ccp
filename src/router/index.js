@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import Login from '@/views/login'
 import Home from '@/views/home'
 import Detaillist from '@/views/detaillist'
+import Seekpaswd from '@/views/seekpaswd'
 import test from '@/views/test'
 
 Vue.use(Router)
@@ -28,6 +29,11 @@ const routes = [
     component: Detaillist
   },
   {
+    path: '/seekpaswd',
+    name: '找回密码',
+    component: Seekpaswd
+  },
+  {
     path: '/test',
     name: '测试',
     component: test
@@ -47,6 +53,8 @@ router.beforeEach((to, form, next) => {
     next()
     return
   }
+
+  if (to.path === '/seekpaswd') return next()
 
   if (!Token) return next({ path: '/login' })
 

@@ -18,7 +18,14 @@ export default {
   height: 100vh;
   background:url('./static/image/bg.png') no-repeat center center ,linear-gradient(154deg,#0779ff,#1fdfff);
   background-size: cover;
-
 }
 
+@media screen and (max-width: 767px) and (min-width: 359px){
+.home .el-dialog {
+   width: 92%;
+}
+.el-message {
+  min-width: 320px !important
+}
+}
 </style>

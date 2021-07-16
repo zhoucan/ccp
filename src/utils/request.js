@@ -47,8 +47,7 @@ service.interceptors.response.use(
     if (isShowMessage && res.code === 200) {
       Message({
         message,
-        type: 'success',
-        duration: 3 * 1000
+        type: 'success'
       })
       return res
     }
@@ -58,8 +57,7 @@ service.interceptors.response.use(
       const message = (res.error && res.error.message) || res.message || res.msg || '未知错误'
       Message({
         message,
-        type: 'error',
-        duration: 3 * 1000
+        type: 'error'
       })
       console.log('拦截器打印错误:', res)
       // 这里可以设置后台返回状态码是500或者是其他,然后重定向跳转
@@ -89,8 +87,7 @@ service.interceptors.response.use(
       }
       Message({
         message: '服务器繁忙, 请稍后再试!  ' + code,
-        type: 'error',
-        duration: 3 * 1000
+        type: 'error'
       })
       return Promise.reject(error.message)
     } else {

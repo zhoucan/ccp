@@ -50,3 +50,21 @@ export function cppOutRechargeList (params) {
     isShowMessage: false
   })
 }
+
+export function sendUpdateEmail (data) {
+  return request({
+    url: '/system/registry/sendUpdateEmail',
+    method: 'post',
+    data,
+    isShowMessage: true
+  })
+}
+
+export function retrievePwdByEmail (data) {
+  return request({
+    url: '/system/registry/retrievePwdByEmail',
+    method: 'post',
+    data,
+    isShowMessage: true
+  })
+}

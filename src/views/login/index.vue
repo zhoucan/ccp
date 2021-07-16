@@ -87,14 +87,18 @@
         <el-button
           round
           class="loginbtn"
-          :loding='loginDisbled'
+          :loading='loginDisbled'
           @click="loginSubmit('ruleFormlogin')"
           style="width:100%"
           >登录</el-button
         >
       </el-form>
       <div class="tip">
-        <el-link :underline="false" @click="goLogin">未登录？去注册</el-link>
+        <el-row type="flex" justify="space-between">
+          <el-link :underline="false" @click="goLogin">没账号？去注册</el-link>
+          <el-link :underline="false" @click="goSeekpaswd">找回密码</el-link>
+       </el-row>
+
       </div>
     </div>
   </div>
@@ -151,6 +155,9 @@ export default {
     }
   },
   methods: {
+    goSeekpaswd () {
+      this.$router.push({ path: '/seekpaswd' })
+    },
     goLogin () {
       if (this.loginOrregister !== 'register') {
         this.loginOrregister = 'register'
